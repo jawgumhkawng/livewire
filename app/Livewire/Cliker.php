@@ -5,9 +5,12 @@ namespace App\Livewire;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
+use Livewire\WithPagination;
 
 class Cliker extends Component
 {
+    use WithPagination;
+
     #[Rule('required|min:5|max:20')]
     public $name = '';
 
@@ -26,11 +29,13 @@ class Cliker extends Component
         ]);
 
         $this->reset(['name', 'email', 'password']);
+
+        request()->session()->flash('success', 'User Create Successfully!!');
     }
     public function render()
     {
 
-        $users = User::all();
+        $users = User::paginate(5);
         return view(
             'livewire.cliker',
             [
